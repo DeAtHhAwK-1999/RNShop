@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 import {
@@ -11,19 +11,24 @@ import {
 import TabBottomNavigation from './TabBottomNavigation';
 import Profile from '../Pages/Profile';
 import Settings from '../Pages/Settings';
+import { AuthContext } from './AuthProvider';
 
 const Drawer = createDrawerNavigator();
 
-function CustomDrawerContent(props) {
+function CustomDrawerContent(props, login) {
+    const {user, logout} = useContext(AuthContext);
     return (
         <View style={{ flex: 1 }}>
+            <View>
+                <Text>Hello {user.uid}</Text>
+            </View>
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props} />
                 {/* <DrawerItem label="Logout" onPress={() => props.navigation.navigate("Profile")} /> */}
             </DrawerContentScrollView>
             <TouchableOpacity
                 // onPress={() => props.navigation.dispatch(StackActions.popToTop())}
-                onPress={() => { props.navigation.navigate('Settings') }}
+                onPress={() => { logout() }}
             >
                 <View style={styles.item}>
                     <View style={styles.iconContainer}>
@@ -36,9 +41,10 @@ function CustomDrawerContent(props) {
     );
 }
 
-const MyDrawer = () => {
+const MyDrawer = ({ login }) => {
+    console.log(login);
     return (
-        <Drawer.Navigator initialRouteName='Main' drawerContent={props => <CustomDrawerContent {...props} />}>
+        <Drawer.Navigator initialRouteName='Main' drawerContent={props => <CustomDrawerContent {...props} login={login} />}>
             <Drawer.Screen name="Main" component={TabBottomNavigation} options={{ drawerIcon: () => <Image source={require('../../assets/Images/logo.png')} style={styles.icon} /> }} />
             <Drawer.Screen name="Profile" component={Profile} options={{ drawerIcon: () => <Image source={require('../../assets/Images/logo.png')} style={styles.icon} /> }} />
             <Drawer.Screen name="Settings" component={Settings} options={{ drawerIcon: () => <Image source={require('../../assets/Images/logo.png')} style={styles.icon} /> }} />

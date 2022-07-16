@@ -6,22 +6,15 @@
  * @flow strict-local
  */
 
-import { NavigationContainer } from '@react-navigation/native';
-import React, { useState } from 'react';
-import MyDrawer from './compoenets/Navigation/Drawer';
-import HomeNav from './compoenets/Navigation/HomeNavigation';
+import React from 'react';
+import AppNav from './compoenets/Navigation/AppNav';
+import AuthProvider from './compoenets/Navigation/AuthProvider';
 
 const App = () => {
-  const [LoggedIn, setLoggedIn] = useState(true);
   return (
-    <NavigationContainer>
-      {
-        LoggedIn ?
-          <MyDrawer />
-          :
-          <HomeNav />
-      }
-    </NavigationContainer>
+    <AuthProvider>
+      <AppNav />
+    </AuthProvider>
   );
 };
 

@@ -12,7 +12,7 @@ const Home = ({ navigation }) => {
                 <Text>Login Page</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {navigation.push('Profile')}}>
-                <Text>Login Page</Text>
+                <Text>Profile Page</Text>
             </TouchableOpacity>
         </View>
     );

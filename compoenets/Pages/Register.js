@@ -1,311 +1,253 @@
-import React, { Component } from 'react';
-import { Button, Keyboard, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+// import { StatusBar } from "expo-status-bar";
+import React, { useContext, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  Keyboard,
+  Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Modal,
+  Pressable,
+  Alert,
+} from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { AuthContext } from "../Navigation/AuthProvider";
 
-export default class Register extends Component {
+const Register = ({ navigation }) => {
 
-  emailInputRef = React.createRef();
-  passwordInputRef = React.createRef();
-  firstnameInputRef = React.createRef();
-  lastnameInputRef = React.createRef();
-  occupationInputRef = React.createRef();
-  addressInputRef = React.createRef();
-  zipInputRef = React.createRef();
-  phoneInputRef = React.createRef();
-  scrollViewRef = React.createRef();
+  const { register } = useContext(AuthContext);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-        email: '',
-        password: '',
-        firstname: '',
-        lastname: '',
-        occupation: '',
-        address: '',
-        zip: '',
-        phone: '',
-        showEmailError: false,
-        showPasswordError: false,
-        showFirstnameError: false,
-        showLastnameError: false,
-        showOccupationError: false,
-        showAddressError: false,
-        showZipError: false,
-        showPhoneError: false,
-    };
-    this.submitPressed = this.submitPressed.bind(this);
-  }
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [Cpassword, setCPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  inputs = () => {
-    return [
-      this.emailInputRef,
-      this.passwordInputRef,
-      this.firstnameInputRef,
-      this.lastnameInputRef,
-      this.occupationInputRef,
-      this.addressInputRef,
-      this.zipInputRef,
-      this.phoneInputRef,
-    ];
-  };
-
-  editNextInput = () => {
-    console.log("editNextInput")
-    const activeIndex = this.getActiveInputIndex();
-    if (activeIndex === -1) {
-        return;
-    }
-
-    const nextIndex = activeIndex + 1;
-    if (nextIndex < this.inputs().length && this.inputs()[nextIndex].current != null) {
-        this.setFocus(this.inputs()[nextIndex], true);
-    } else {
-        this.finishEditing();
-    }
-  }
-
-  onInputFocus = () => {
-    this.setState({
-        activeIndex: this.getActiveInputIndex(),
-    });
-  }
-
-  onChangeInputHandler = (name, value) => {
-    this.setState({
-        [name]: value,
-    });
-  }
-
-  getActiveInputIndex = () => {
-    const activeIndex = this.inputs().findIndex((input) => {
-        if (input.current == null) {
-            return false;
-        }
-        console.log("input: ", input);
-        return input.current.isFocused();
-    });
-    console.log("activeIndex: ", activeIndex);
-    return activeIndex;
-  }
-
-  finishEditing = () => {
-    const activeIndex = this.getActiveInputIndex();
-    if (activeIndex === -1) {
-        return;
-    }
-    this.setFocus(this.inputs()[activeIndex], false);
-  }
-
-  setFocus(textInputRef, shouldFocus) {
-    if (shouldFocus) {
-        setTimeout(() => {
-            textInputRef.current.focus();
-        }, 100);
-    } else {
-        textInputRef.current.blur();
-    }
-  }
-
-  submitPressed() {
-    console.log("submitPressed this.state: ", this.state);
-    this.setState({
-        showEmailError: this.state.email.length < 4,
-        showPasswordError: this.state.password.length < 4,
-        showFirstnameError: this.state.firstname.length < 4,
-        showLastnameError: this.state.lastname.length < 4,
-        showOccupationError: this.state.occupation.length < 4,
-        showAddressError: this.state.address.length < 4,
-        showZipError: this.state.zip.length < 4,
-        showPhoneError: this.state.phone.length < 4,
-    });
-    console.log("this is the end")
+  const RegisterSubmit = () => {
     Keyboard.dismiss();
+    if (password == Cpassword) {
+      register(email, password);
+      setModalVisible(!modalVisible);
+    } else {
+      Alert.alert("Your confirm password not match the password");
+      setEmail("")
+      setPassword("");
+      setCPassword("");
+    }
+    // if (email == "test" && password == "test") {
+    //   navigation.navigate('Home');
+    // }
+    // else if (email == "" && password != "") {
+    //   setEmailError(true);
+    //   setPasswordError(false);
+    // }
+    // else if (password == "" && email != "") {
+    //   setEmailError(false);
+    //   setPasswordError(true);
+    // }
+    // else if (email == "" && password == "") {
+    //   setEmailError(true);
+    //   setPasswordError(true);
+    // }
+    // else if (email != "" && password != "") {
+    //   setEmail("");
+    //   setEmailError(false);
+    //   setPassword("");
+    //   setPasswordError(false);
+    // }
   }
 
-  render() {
-    return (
-        <KeyboardAwareScrollView
-          style={styles.container}
-          contentOffset={{ x: 0, y: 24 }}
-          ref={this._scrollViewRef}
-          scrollEventThrottle={16}
-          contentContainerStyle={{ paddingTop: 24 }}
-          contentInsetAdjustmentBehavior="always"
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-          enableOnAndroid={true}
-          extraHeight={32}
-          extraScrollHeight={Platform.OS == "android" ? 32 : 0}
-          enableResetScrollToCoords={false}
-          onKeyboardDidShow={this._keyboardDidShowHandler}
-        >
-            <View style={styles.container}>
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.KeyboardView}
+    >
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.container}>
+          <Image style={styles.image} source={require("../../assets/Images/logo.png")} />
 
-                <Text style={styles.header}>Registration</Text>
+          {/* <StatusBar style="auto" /> */}
+          {emailError &&
+            <Text style={styles.errorText}>Please enter your address.</Text>
+          }
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Email."
+              value={email}
+              placeholderTextColor="#003f5c"
+              onChangeText={(email) => setEmail(email)}
+              keyboardType="email-address"
+            />
+          </View>
 
-                <View style={styles.inputTextWrapper}>
-                    <TextInput
-                        placeholder="Email"
-                        style={styles.textInput}
-                        returnKeyType="next"
-                        onSubmitEditing={this.editNextInput}
-                        onFocus={this.onInputFocus}
-                        onChangeText={val => this.onChangeInputHandler('email', val)}
-                        ref={this.emailInputRef}
-                    />
-                    {this.state.showEmailError &&
-                        <Text style={styles.errorText}>Please enter your email address.</Text>
-                    }
-                </View>
+          {passwordError &&
+            <Text style={styles.errorText}>Please enter your address.</Text>
+          }
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Password."
+              placeholderTextColor="#003f5c"
+              value={password}
+              secureTextEntry={true}
+              onChangeText={(password) => setPassword(password)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Confirm Password."
+              placeholderTextColor="#003f5c"
+              value={Cpassword}
+              secureTextEntry={true}
+              onChangeText={(Cpassword) => setCPassword(Cpassword)}
+            />
+          </View>
 
-                <View style={styles.inputTextWrapper}>
-                    <TextInput
-                        placeholder="Password"
-                        style={styles.textInput}
-                        secureTextEntry={true}
-                        returnKeyType="next"
-                        onSubmitEditing={this.editNextInput}
-                        onFocus={this.onInputFocus}
-                        onChangeText={val => this.onChangeInputHandler('password', val)}
-                        ref={this.passwordInputRef}
-                    />
-                    {this.state.showPasswordError &&
-                        <Text style={styles.errorText}>Please enter a password.</Text>
-                    }
-                </View>
+          <TouchableOpacity>
+            <Text style={styles.forgotButton}>Forgot Password?</Text>
+          </TouchableOpacity>
 
-                <View style={styles.inputTextWrapper}>
-                    <TextInput
-                        placeholder="First Name"
-                        style={styles.textInput}
-                        returnKeyType="next"
-                        onSubmitEditing={this.editNextInput}
-                        onFocus={this.onInputFocus}
-                        onChangeText={val => this.onChangeInputHandler('firstname', val)}
-                        ref={this.firstnameInputRef}
-                    />
-                    {this.state.showFirstnameError &&
-                        <Text style={styles.errorText}>Please enter your first name.</Text>
-                    }
-                </View>
+          <TouchableOpacity style={styles.RegisterBtn} onPress={() => { RegisterSubmit() }}>
+            <Text style={styles.RegisterText}>Register</Text>
+          </TouchableOpacity>
 
-                <View style={styles.inputTextWrapper}>
-                    <TextInput
-                        placeholder="Last Name"
-                        style={styles.textInput}
-                        returnKeyType="next"
-                        onSubmitEditing={this.editNextInput}
-                        onFocus={this.onInputFocus}
-                        onChangeText={val => this.onChangeInputHandler('lastname', val)}
-                        ref={this.lastnameInputRef}
-                      />
-                    {this.state.showLastnameError &&
-                        <Text style={styles.errorText}>Please enter your last name.</Text>
-                    }
-                </View>
-
-                <View style={styles.inputTextWrapper}>
-                    <TextInput
-                        placeholder="Occupation"
-                        style={styles.textInput}
-                        returnKeyType="next"
-                        onSubmitEditing={this.editNextInput}
-                        onFocus={this.onInputFocus}
-                        onChangeText={val => this.onChangeInputHandler('occupation', val)}
-                        ref={this.occupationInputRef}
-                    />
-                    {this.state.showOccupationError &&
-                        <Text style={styles.errorText}>Please enter your occupation.</Text>
-                    }
-                </View>
-
-                <View style={styles.inputTextWrapper}>
-                    <TextInput
-                        placeholder="Address"
-                        style={styles.textInput}
-                        returnKeyType="next"
-                        onSubmitEditing={this.editNextInput}
-                        onFocus={this.onInputFocus}
-                        onChangeText={val => this.onChangeInputHandler('address', val)}
-                        ref={this.addressInputRef}
-                      />
-                    {this.state.showAddressError &&
-                        <Text style={styles.errorText}>Please enter your address.</Text>
-                    }
-                </View>
-
-                <View style={styles.inputTextWrapper}>
-                    <TextInput
-                        placeholder="Zipcode"
-                        style={styles.textInput}
-                        returnKeyType="next"
-                        keyboardType='numeric'
-                        onSubmitEditing={this.editNextInput}
-                        onFocus={this.onInputFocus}
-                        onChangeText={val => this.onChangeInputHandler('zip', val)}
-                        ref={this.zipInputRef}
-                    />
-                    {this.state.showZipError &&
-                        <Text style={styles.errorText}>Please enter your zipcode.</Text>
-                    }
-                </View>
-
-                <View style={styles.inputTextWrapper}>
-                    <TextInput
-                        placeholder="Phone"
-                        style={styles.textInput}
-                        returnKeyType="done"
-                        onSubmitEditing={this.editNextInput}
-                        onFocus={this.onInputFocus}
-                        onChangeText={val => this.onChangeInputHandler('phone', val)}
-                        ref={this.phoneInputRef}
-                    />
-                    {this.state.showPhoneError &&
-                        <Text style={styles.errorText}>Please enter your phone number.</Text>
-                    }
-                </View>
-
-                <View style={styles.btnContainer}>
-                  <Button title="Submit" onPress={this.submitPressed} />
-                </View>
-
+          <View style={styles.RegNavText}>
+            <Text>Already Have An Account? </Text>
+            <TouchableOpacity style={styles.TouchableRegNav} onPress={() => { navigation.navigate('Login') }}>
+              <Text>Login!</Text>
+            </TouchableOpacity>
+          </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>You Registered Success!</Text>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => { setModalVisible(!modalVisible); navigation.navigate("Login"); }}
+                >
+                  <Text style={styles.textStyle}>Okay</Text>
+                </Pressable>
+              </View>
             </View>
-        </KeyboardAwareScrollView>
-      );
-  }
+          </Modal>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 16,
-      paddingBottom: 100,
+  KeyboardView: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  image: {
+    marginBottom: 40,
+    width: 80,
+    height: 100,
+  },
+
+  inputView: {
+    backgroundColor: "#FFC0CB",
+    borderRadius: 30,
+    width: "70%",
+    height: 45,
+    marginBottom: 20,
+
+    alignItems: "center",
+  },
+  TextInput: {
+    justifyContent: 'center',
+    flex: 1,
+  },
+
+  forgotButton: {
+    height: 30,
+    marginBottom: 30,
+  },
+
+  RegisterBtn: {
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    backgroundColor: "#FF1493",
+  },
+  RegNavText: {
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: 0,
+  },
+  TouchableRegNav: {
+    justifyContent: 'center',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
     },
-    header: {
-      fontSize: 36,
-      padding: 24,
-      margin: 12,
-      textAlign: "center",
-    },
-    inputTextWrapper: {
-      marginBottom: 24,
-    },
-    textInput: {
-        height: 55,
-        backgroundColor: '#42A5F5',
-        padding: 8,
-        color: 'white',
-        borderRadius: 14,
-        fontSize: 18,
-        fontWeight: '500',
-    },
-    errorText: {
-      color: 'red',
-      fontSize: 10,
-    },
-    btnContainer: {
-      backgroundColor: "white",
-      marginTop:36,
-    }
-  });
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+});
+
+export default Register;
