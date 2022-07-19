@@ -33,8 +33,10 @@ const Register = ({ navigation }) => {
   const RegisterSubmit = () => {
     Keyboard.dismiss();
     if (password == Cpassword) {
-      register(email, password);
       setModalVisible(!modalVisible);
+      if (!modalVisible) {
+        register(email, password);
+      }
     } else {
       Alert.alert("Your confirm password not match the password");
       setEmail("")
@@ -140,7 +142,7 @@ const Register = ({ navigation }) => {
                 <Text style={styles.modalText}>You Registered Success!</Text>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => { setModalVisible(!modalVisible); navigation.navigate("Login"); }}
+                  onPress={() => { setModalVisible(!modalVisible); }}
                 >
                   <Text style={styles.textStyle}>Okay</Text>
                 </Pressable>

@@ -20,7 +20,7 @@ function CustomDrawerContent(props, login) {
     return (
         <View style={{ flex: 1 }}>
             <View>
-                <Text>Hello {user.uid}</Text>
+                <Text>Hello {user.email}</Text>
             </View>
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props} />
