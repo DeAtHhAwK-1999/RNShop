@@ -12,13 +12,14 @@ import {
     Platform,
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
+    Alert
 } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AuthContext } from "../Navigation/AuthProvider";
 
 const Login = ({ navigation }) => {
 
-    const {login} = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState(false);
@@ -26,28 +27,26 @@ const Login = ({ navigation }) => {
 
     const LoginSubmit = () => {
         Keyboard.dismiss();
-        login(email, password);
-        // if (email == "test" && password == "test") {
-        //     navigation.navigate('Home');
-        // }
-        // else if (email == "" && password != "") {
-        //     setEmailError(true);
-        //     setPasswordError(false);
-        // }
-        // else if (password == "" && email != "") {
-        //     setEmailError(false);
-        //     setPasswordError(true);
-        // }
-        // else if (email == "" && password == "") {
-        //     setEmailError(true);
-        //     setPasswordError(true);
-        // }
-        // else if (email != "" && password != "") {
-        //     setEmail("");
-        //     setEmailError(false);
-        //     setPassword("");
-        //     setPasswordError(false);
-        // }
+        if (email == "" && password != "") {
+            Alert.alert("Please Enter Your Email!")
+            setEmailError(true);
+            setPasswordError(false);
+        }
+        else if (password == "" && email != "") {
+            Alert.alert("Please Enter Your Password!");
+            setEmailError(false);
+            setPasswordError(true);
+        }
+        else if (email == "" && password == "") {
+            Alert.alert("Please Enter Your Email And Password!");
+            setEmailError(true);
+            setPasswordError(true);
+        }
+        else if (email != "" && password != "") {
+            setEmailError(false);
+            setPasswordError(false);
+            login(email, password);
+        }
     }
 
     return (
@@ -92,7 +91,7 @@ const Login = ({ navigation }) => {
                         <Text style={styles.forgotButton}>Forgot Password?</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.loginBtn} onPress={() => login(email, password)}>
+                    <TouchableOpacity style={styles.loginBtn} onPress={LoginSubmit}>
                         <Text style={styles.loginText}>LOGIN</Text>
                     </TouchableOpacity>
 

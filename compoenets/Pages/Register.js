@@ -23,47 +23,50 @@ const Register = ({ navigation }) => {
 
   const { register } = useContext(AuthContext);
 
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [Cpassword, setCPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
+  const [UsernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [CpasswordError, setCPasswordError] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   const RegisterSubmit = () => {
     Keyboard.dismiss();
-    if (password == Cpassword) {
-      setModalVisible(!modalVisible);
-      if (!modalVisible) {
-        register(email, password);
+    if (username == "" || email == "" || password == "" || Cpassword == "") {
+      if (username == "") {
+        setUsernameError(true);
+      } else {
+        setUsernameError(false);
+      }
+      if (email == "") {
+        setEmailError(true);
+      } else {
+        setEmailError(false);
+      }
+      if (password == "") {
+        setPasswordError(true);
+      } else {
+        setPasswordError(false);
+      }
+      if (Cpassword == "") {
+        setCPasswordError(true);
+      } else {
+        setCPasswordError(false);
       }
     } else {
-      Alert.alert("Your confirm password not match the password");
-      setEmail("")
-      setPassword("");
-      setCPassword("");
+      setUsernameError(false);
+      setEmailError(false);
+      setPasswordError(false);
+      setCPasswordError(false);
+      if (password == Cpassword) {
+        register(email, password);
+      } else {
+        Alert.alert("Your confirm password not match the password");
+      }
     }
-    // if (email == "test" && password == "test") {
-    //   navigation.navigate('Home');
-    // }
-    // else if (email == "" && password != "") {
-    //   setEmailError(true);
-    //   setPasswordError(false);
-    // }
-    // else if (password == "" && email != "") {
-    //   setEmailError(false);
-    //   setPasswordError(true);
-    // }
-    // else if (email == "" && password == "") {
-    //   setEmailError(true);
-    //   setPasswordError(true);
-    // }
-    // else if (email != "" && password != "") {
-    //   setEmail("");
-    //   setEmailError(false);
-    //   setPassword("");
-    //   setPasswordError(false);
-    // }
   }
 
   return (
@@ -76,8 +79,21 @@ const Register = ({ navigation }) => {
           <Image style={styles.image} source={require("../../assets/Images/logo.png")} />
 
           {/* <StatusBar style="auto" /> */}
+          {UsernameError &&
+            <Text style={styles.errorText}>Please enter your username.</Text>
+          }
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Username."
+              value={username}
+              placeholderTextColor="#003f5c"
+              onChangeText={(username) => setUsername(username)}
+              keyboardType='name-phone-pad'
+            />
+          </View>
           {emailError &&
-            <Text style={styles.errorText}>Please enter your address.</Text>
+            <Text style={styles.errorText}>Please enter your email.</Text>
           }
           <View style={styles.inputView}>
             <TextInput
@@ -91,7 +107,7 @@ const Register = ({ navigation }) => {
           </View>
 
           {passwordError &&
-            <Text style={styles.errorText}>Please enter your address.</Text>
+            <Text style={styles.errorText}>Please enter your password.</Text>
           }
           <View style={styles.inputView}>
             <TextInput
@@ -103,6 +119,9 @@ const Register = ({ navigation }) => {
               onChangeText={(password) => setPassword(password)}
             />
           </View>
+          {CpasswordError &&
+            <Text style={styles.errorText}>Please enter your confirm password.</Text>
+          }
           <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
