@@ -7,7 +7,7 @@ import auth from '@react-native-firebase/auth';
 
 const AppNav = () => {
 
-    const { user, setUser } = useContext(AuthContext);
+    const { user, setUser, Lang } = useContext(AuthContext);
     const [LoggedIn, setLoggedIn] = useState(false);
 
     const onAuthStateChanged = (user) => {
@@ -24,7 +24,7 @@ const AppNav = () => {
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
     }, []);
-
+    global.lang = Lang;
     return (
         <NavigationContainer>
             {

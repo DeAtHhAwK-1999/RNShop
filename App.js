@@ -7,8 +7,8 @@
  */
 
 import React from 'react';
-import AppNav from './compoenets/Navigation/AppNav';
-import AuthProvider from './compoenets/Navigation/AuthProvider';
+import AppNav from './components/Navigation/AppNav';
+import AuthProvider from './components/Navigation/AuthProvider';
 
 const App = () => {
   return (
