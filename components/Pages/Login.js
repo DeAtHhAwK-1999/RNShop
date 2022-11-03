@@ -6,17 +6,15 @@ import {
     View,
     Image,
     TextInput,
-    Button,
     TouchableOpacity,
     Keyboard,
     Platform,
-    KeyboardAvoidingView,
     TouchableWithoutFeedback,
     Alert,
     Dimensions
 } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AuthContext } from "../Navigation/AuthProvider";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import MTranslate from "../../Languages/multiLang";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Colors from "../../assets/Themes/Colors";
@@ -41,7 +39,7 @@ const Login = ({ navigation }) => {
         setEmailError(false);
         setEmailErrorMessage("");
         setPasswordError(false);
-        setEmailErrorMessage("");
+        setPasswordErrorMessage("");
         Keyboard.dismiss();
         if (email && password) {
             email.includes(" ")
@@ -92,79 +90,89 @@ const Login = ({ navigation }) => {
         }
     }
 
-    const setLanguageEn = async () => {
-        await AsyncStorage.setItem("language", "english");
-        setLang("english");
-    }
-    
-    const setLanguageAr = async () => {
-        await AsyncStorage.setItem("language", "arabic");
-        setLang("arabic");
-    }
-
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.KeyboardView}
-        >
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                <View style={styles.container}>
-                    <Image style={styles.image} source={require("../../assets/Images/loginPic.png")} />
-
-                    {/* <StatusBar style="auto" /> */}
-                    {emailError &&
-                        <Text style={styles.errorText}>{MTranslate(emailErrorMessage)}</Text>
-                    }
-                    <View style={styles.inputView}>
-                        <TextInput
-                            ref={EmailInput}
-                            style={styles.TextInput}
-                            placeholder={MTranslate("email")}
-                            returnKeyType="next"
-                            cursorColor={global.PrimaryColor}
-                            textAlign="center"
-                            value={email}
-                            placeholderTextColor="#003f5c"
-                            onChangeText={(email) => setEmail(email)}
-                            keyboardType="email-address"
-                            onSubmitEditing={() => { PasswordInput.current.focus() }}
-                        />
-                    </View>
-
-                    {passwordError &&
-                        <Text style={styles.errorText}>{MTranslate(passwordErrorMessage)}</Text>
-                    }
-                    <View style={styles.inputView}>
-                        <TextInput
-                            ref={PasswordInput}
-                            style={styles.TextInput}
-                            placeholder={MTranslate("password")}
-                            textAlign="center"
-                            cursorColor={global.PrimaryColor}
-                            placeholderTextColor="#003f5c"
-                            value={password}
-                            secureTextEntry={showPassword}
-                            onChangeText={(password) => setPassword(password)}
-                        />
-                    </View>
-
-                    <TouchableOpacity>
-                        <Text style={styles.forgotButton}>{MTranslate("forgot_password?")}</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.loginBtn} onPress={LoginSubmit}>
-                        <Text style={styles.loginText}>{MTranslate("sign_in")}</Text>
-                    </TouchableOpacity>
-
-                    <View style={Lang == "english" ? styles.EnRegNavText : styles.ArRegNavText}>
-                        <TouchableOpacity style={styles.TouchableRegNav} onPress={() => { navigation.navigate('Register') }}>
-                            <Text>{MTranslate("sign_up")}</Text>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <View style={styles.container}>
+                <Image style={styles.LogoImage} source={require("../../assets/Images/loginPic.png")} />
+                <View style={styles.LoginTitle}>
+                    <Text style={styles.TextLoginHeader}>{MTranslate("login_to_your_account")}</Text>
+                    <View style={styles.LoginContainer}>
+                        {/* <StatusBar style="auto" /> */}
+                        {emailError &&
+                            <Text style={styles.errorText}>{MTranslate(emailErrorMessage)}</Text>
+                        }
+                        <View style={styles.inputView}>
+                            <Icon name="user" size={25} color={Colors.SeconderyColor} />
+                            <TextInput
+                                ref={EmailInput}
+                                style={styles.TextInput}
+                                placeholder={MTranslate("email")}
+                                returnKeyType="next"
+                                cursorColor={global.PrimaryColor}
+                                textAlign={Lang == "arabic" ? "right" : "left"}
+                                value={email}
+                                placeholderTextColor={Colors.SeconderyColor}
+                                onChangeText={(email) => setEmail(email)}
+                                keyboardType="email-address"
+                                onSubmitEditing={() => { PasswordInput.current.focus() }}
+                            />
+                        </View>
+                        {passwordError &&
+                            <Text style={styles.errorText}>{MTranslate(passwordErrorMessage)}</Text>
+                        }
+                        <View style={styles.inputView}>
+                            <Icon name="lock" size={25} color={Colors.SeconderyColor} />
+                            <TextInput
+                                ref={PasswordInput}
+                                style={styles.TextInput}
+                                placeholder={showPassword ? MTranslate("password") : "**********"}
+                                textAlign={Lang == "arabic" ? "right" : "left"}
+                                cursorColor={global.PrimaryColor}
+                                placeholderTextColor={Colors.SeconderyColor}
+                                value={password}
+                                secureTextEntry={showPassword}
+                                onChangeText={(password) => setPassword(password)}
+                            />
+                            {
+                                showPassword
+                                    ?
+                                    <TouchableOpacity onPress={() => { setShowPassword(false) }}>
+                                        <Icon name="eye" size={20} color={Colors.SeconderyColor} />
+                                    </TouchableOpacity>
+                                    :
+                                    <TouchableOpacity onPress={() => { setShowPassword(true) }}>
+                                        <Icon name="eye-slash" size={20} color={Colors.SeconderyColor} />
+                                    </TouchableOpacity>
+                            }
+                        </View>
+                        <TouchableOpacity>
+                            <Text style={styles.forgotButton}>{MTranslate("forgot_password?")}</Text>
                         </TouchableOpacity>
-                        <Text>{MTranslate("you_don't_have_an_account?")} </Text>
+                        <TouchableOpacity style={styles.loginBtn} onPress={LoginSubmit}>
+                            <Text style={styles.loginText}>{MTranslate("sign_in")}</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.OrSingInText}>{MTranslate("or_sign_in_with")}</Text>
+                        <View style={styles.signinWithStyle}>
+                            <TouchableOpacity style={styles.singinWithIconStyle}>
+                                <Icon name="facebook" size={25} color="#3b5998" />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.singinWithIconStyle}>
+                                <Icon name="twitter" size={25} color="#00acee" />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.singinWithIconStyle}>
+                                <Icon name="google-plus" size={25} color="#DB4437" />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.RegNavText}>
+                            <TouchableOpacity style={styles.TouchableRegNav} onPress={() => { navigation.navigate('Register') }}>
+                                <Text style={styles.TextSignUpStyle}>{MTranslate("sign_up")}</Text>
+                            </TouchableOpacity>
+                            <Text>{MTranslate("you_don't_have_an_account?")} </Text>
+                        </View>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+            </View>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -177,32 +185,85 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.PrimaryColor,
         alignItems: "center",
     },
-    image: {
-        marginVertical: 40,
+    LoginTitle: {
+        flex: 1,
+        width: windowWidth,
+        borderTopRightRadius: 40,
+        borderTopLeftRadius: 40,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#E7F7F8',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 50,
+    },
+    TextLoginHeader: {
+        color: '#003f5c',
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginVertical: 10,
+    },
+    LoginContainer: {
+        flex: 1,
+        width: windowWidth,
+        paddingTop: 30,
+        borderTopRightRadius: 40,
+        borderTopLeftRadius: 40,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    LogoImage: {
+        marginVertical: 20,
         width: windowWidth - 50,
         height: 200,
-        resizeMode: 'stretch',
+        resizeMode: 'cover',
         overflow: 'visible',
     },
     inputView: {
-        backgroundColor: "#FFC0CB",
-        borderRadius: 30,
-        width: "70%",
+        flexDirection: global.lang == "english" ? "row" : "row-reverse",
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#003f5c',
+        borderWidth: 1,
+        borderRadius: 10,
+        width: windowWidth - 75,
         height: 45,
         marginBottom: 20,
-
+        paddingHorizontal: 10,
         alignItems: "center",
     },
     TextInput: {
         height: 50,
-        width: '100%',
+        width: '90%',
         flex: 1,
         padding: 10,
         // marginLeft: 20,
     },
     forgotButton: {
         height: 30,
-        marginBottom: 30,
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: Colors.SeconderyColor,
+    },
+    OrSingInText: {
+        fontSize: 15,
+        color: Colors.SeconderyColor,
+        marginVertical: 10,
     },
     loginBtn: {
         width: "80%",
@@ -211,19 +272,16 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 40,
-        backgroundColor: "#FF1493",
+        backgroundColor: Colors.SeconderyColor,
     },
-    ArRegNavText: {
-        flex: 1,
-        flexDirection: "row",
-        marginVertical: 10,
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        width: windowWidth,
+    loginText: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: '#fff',
     },
-    EnRegNavText: {
+    RegNavText: {
         flex: 1,
-        flexDirection: "row-reverse",
+        flexDirection: global.ang == "english" ? "row-reverse" : "row",
         marginVertical: 10,
         justifyContent: 'center',
         alignItems: 'flex-end',
@@ -235,6 +293,27 @@ const styles = StyleSheet.create({
     errorText: {
         color: 'red',
         fontSize: 10,
+    },
+    TextSignUpStyle: {
+        color: Colors.PrimaryColor,
+        fontWeight: 'bold',
+    },
+    signinWithStyle: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width: windowWidth - 75,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    singinWithIconStyle: {
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: 'lightgray',
+        height: 42,
+        width: 42,
+        marginHorizontal: 10,
+        borderRadius: 50,
     },
 });
 

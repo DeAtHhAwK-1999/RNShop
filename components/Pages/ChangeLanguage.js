@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, Image } from 'react-native';
+import { View, TouchableOpacity, Text, Image, I18nManager } from 'react-native';
 
 const ChangeLanguage = ({ navigation }) => {
 
     const setLanguageEn = async () => {
         await AsyncStorage.setItem("language", "english");
+        I18nManager.forceRTL(true);
         setLang("english");
     }
 
     const setLanguageAr = async () => {
         await AsyncStorage.setItem("language", "arabic");
+        I18nManager.forceRTL(false);
         setLang("arabic");
     }
 

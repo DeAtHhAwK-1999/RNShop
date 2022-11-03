@@ -1,5 +1,5 @@
 // import { StatusBar } from "expo-status-bar";
-import React, { useContext, useState } from "react";
+import React, { createRef, useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,18 +10,22 @@ import {
   TouchableOpacity,
   Keyboard,
   Platform,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Modal,
   Pressable,
   Alert,
+  Dimensions,
 } from "react-native";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AuthContext } from "../Navigation/AuthProvider";
+import MTranslate from "../../Languages/multiLang";
+import Colors from "../../assets/Themes/Colors";
+
+const windowWidth = Dimensions.get("screen").width;
+const windowHeight = Dimensions.get("screen").height;
 
 const Register = ({ navigation }) => {
 
-  const { register } = useContext(AuthContext);
+  const { register, Lang } = useContext(AuthContext);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -31,146 +35,208 @@ const Register = ({ navigation }) => {
   const [UsernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [CpasswordError, setCPasswordError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [CpasswordErrorMessage, setCPasswordErrorMessage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const EmailInput = createRef();
+  const PasswordInput = createRef();
+  const CpasswordInput = createRef();
+  const UsernameInput = createRef();
 
   const RegisterSubmit = () => {
+    setEmailError(true);
+    setEmailErrorMessage("please_enter_your_email");
+    setPasswordError(true);
+    setPasswordErrorMessage("please_enter_your_password");
+    setUsernameError(true);
+    setUsernameErrorMessage("please_enter_your_username");
+    setCPasswordError(true);
+    setCPasswordErrorMessage("please_enter_your_confirm_password");
     Keyboard.dismiss();
-    if (username == "" || email == "" || password == "" || Cpassword == "") {
-      if (username == "") {
-        setUsernameError(true);
-      } else {
-        setUsernameError(false);
-      }
-      if (email == "") {
-        setEmailError(true);
-      } else {
-        setEmailError(false);
-      }
-      if (password == "") {
-        setPasswordError(true);
-      } else {
-        setPasswordError(false);
-      }
-      if (Cpassword == "") {
-        setCPasswordError(true);
-      } else {
-        setCPasswordError(false);
-      }
-    } else {
+    if (email && password && Cpassword && username) {
       setUsernameError(false);
+      setUsernameErrorMessage("");
       setEmailError(false);
+      setEmailErrorMessage("");
       setPasswordError(false);
+      setPasswordErrorMessage("");
       setCPasswordError(false);
-      if (password == Cpassword) {
-        register(email, password);
-      } else {
-        Alert.alert("Your confirm password not match the password");
+      setCPasswordErrorMessage("");
+      console.log("we are here");
+      email.includes(" ")
+        ?
+        (setEmailErrorMessage("email_cannot_contain_spaces") ?? setEmailError(true))
+        :
+        !email.includes("@")
+          ?
+          (setEmailErrorMessage("enter_valid_email_with_@") ?? setEmailError(true))
+          :
+          password.includes(" ")
+            ?
+            (setPasswordErrorMessage("password_cannot_contain_spaces") ?? setPasswordError(true))
+            :
+            password.length < 6
+              ?
+              (setPasswordErrorMessage("password_should_be_6_characters_or_more") ?? setPasswordError(true))
+              :
+              password != Cpassword
+                ?
+                (setCPasswordErrorMessage("confirm_password_should_match_password") ?? setCPasswordError(true))
+                :
+                (
+                  setEmailError(false)
+                  ??
+                  setEmailErrorMessage("")
+                  ??
+                  setPasswordError(false)
+                  ??
+                  setPasswordErrorMessage("")
+                  ??
+                  setCPasswordError(false)
+                  ??
+                  setCPasswordErrorMessage("")
+                  ??
+                  setUsernameError(false)
+                  ??
+                  setUsernameErrorMessage("")
+                  ??
+                  register(email, password)
+                );
+    }
+    else if (username != "" || email != "" || password != "" || Cpassword != "") {
+      if (username) {
+        setUsernameError(false);
+        setUsernameErrorMessage("");
+      }
+      if (password) {
+        setPasswordError(false);
+        setPasswordErrorMessage("");
+      }
+      if (email) {
+        setEmailError(false);
+        setEmailErrorMessage("");
+      }
+      if (Cpassword) {
+        setCPasswordError(false);
+        setCPasswordErrorMessage("");
       }
     }
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.KeyboardView}
-    >
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.container}>
-          <Image style={styles.image} source={require("../../assets/Images/logo.png")} />
-
-          {/* <StatusBar style="auto" /> */}
-          {UsernameError &&
-            <Text style={styles.errorText}>Please enter your username.</Text>
-          }
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Username."
-              value={username}
-              placeholderTextColor="#003f5c"
-              onChangeText={(username) => setUsername(username)}
-              keyboardType='name-phone-pad'
-            />
-          </View>
-          {emailError &&
-            <Text style={styles.errorText}>Please enter your email.</Text>
-          }
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Email."
-              value={email}
-              placeholderTextColor="#003f5c"
-              onChangeText={(email) => setEmail(email)}
-              keyboardType="email-address"
-            />
-          </View>
-
-          {passwordError &&
-            <Text style={styles.errorText}>Please enter your password.</Text>
-          }
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Password."
-              placeholderTextColor="#003f5c"
-              value={password}
-              secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)}
-            />
-          </View>
-          {CpasswordError &&
-            <Text style={styles.errorText}>Please enter your confirm password.</Text>
-          }
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Confirm Password."
-              placeholderTextColor="#003f5c"
-              value={Cpassword}
-              secureTextEntry={true}
-              onChangeText={(Cpassword) => setCPassword(Cpassword)}
-            />
-          </View>
-
-          <TouchableOpacity>
-            <Text style={styles.forgotButton}>Forgot Password?</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.RegisterBtn} onPress={() => { RegisterSubmit() }}>
-            <Text style={styles.RegisterText}>Register</Text>
-          </TouchableOpacity>
-
-          <View style={styles.RegNavText}>
-            <Text>Already Have An Account? </Text>
-            <TouchableOpacity style={styles.TouchableRegNav} onPress={() => { navigation.navigate('Login') }}>
-              <Text>Login!</Text>
-            </TouchableOpacity>
-          </View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>You Registered Success!</Text>
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => { setModalVisible(!modalVisible); }}
-                >
-                  <Text style={styles.textStyle}>Okay</Text>
-                </Pressable>
-              </View>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <Image style={styles.LogoImage} source={require("../../assets/Images/loginPic.png")} />
+        <View style={styles.RegisterTitle}>
+          <Text style={styles.TextRegisterHeader}>{MTranslate("create_new_account")}</Text>
+          <View style={styles.RegisterContainer}>
+            {/* <StatusBar style="auto" /> */}
+            {UsernameError &&
+              <Text style={styles.errorText}>{MTranslate(usernameErrorMessage)}</Text>
+            }
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                ref={UsernameInput}
+                returnKeyType="next"
+                cursorColor={global.PrimaryColor}
+                placeholder={MTranslate("username")}
+                value={username}
+                placeholderTextColor="#003f5c"
+                textAlign={Lang == "arabic" ? "right" : "left"}
+                onChangeText={(username) => setUsername(username)}
+                keyboardType='name-phone-pad'
+                onSubmitEditing={() => { EmailInput.current.focus() }}
+              />
             </View>
-          </Modal>
+            {emailError &&
+              <Text style={styles.errorText}>{MTranslate(emailErrorMessage)}</Text>
+            }
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                ref={EmailInput}
+                returnKeyType="next"
+                cursorColor={global.PrimaryColor}
+                placeholder={MTranslate("email")}
+                value={email}
+                placeholderTextColor="#003f5c"
+                textAlign={Lang == "arabic" ? "right" : "left"}
+                onChangeText={(email) => setEmail(email)}
+                keyboardType="email-address"
+                onSubmitEditing={() => { PasswordInput.current.focus() }}
+              />
+            </View>
+            {passwordError &&
+              <Text style={styles.errorText}>{MTranslate(passwordErrorMessage)}</Text>
+            }
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                ref={PasswordInput}
+                returnKeyType="next"
+                cursorColor={global.PrimaryColor}
+                placeholder={MTranslate("password")}
+                placeholderTextColor="#003f5c"
+                textAlign={Lang == "arabic" ? "right" : "left"}
+                value={password}
+                keyboardType="default"
+                onChangeText={(password) => setPassword(password)}
+                onSubmitEditing={() => { CpasswordInput.current.focus() }}
+              />
+            </View>
+            {CpasswordError &&
+              <Text style={styles.errorText}>{MTranslate(CpasswordErrorMessage)}</Text>
+            }
+            <View style={styles.inputView}>
+              <TextInput
+                style={styles.TextInput}
+                ref={CpasswordInput}
+                cursorColor={global.PrimaryColor}
+                placeholder={MTranslate("confirm_password")}
+                placeholderTextColor="#003f5c"
+                textAlign={Lang == "arabic" ? "right" : "left"}
+                value={Cpassword}
+                keyboardType="default"
+                onChangeText={(Cpassword) => setCPassword(Cpassword)}
+              />
+            </View>
+            <TouchableOpacity style={styles.RegisterBtn} onPress={() => { RegisterSubmit() }}>
+              <Text style={styles.RegisterText}>{MTranslate("sign_up")}</Text>
+            </TouchableOpacity>
+            <View style={styles.RegNavText}>
+              <Text>{MTranslate("already_have_an_account?")} </Text>
+              <TouchableOpacity style={styles.TouchableRegNav} onPress={() => { navigation.navigate('Login') }}>
+                <Text style={styles.TextSignUpStyle}>{MTranslate("sign_in")}</Text>
+              </TouchableOpacity>
+            </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={styles.modalText}>You Registered Success!</Text>
+                  <Image source={require("../../assets/Images/RegisterSuccess.png")} style={styles.ImageSuccessStyle} />
+                  <Pressable
+                    style={styles.buttonSuccess}
+                    onPress={() => { setModalVisible(!modalVisible); }}
+                  >
+                    <Text style={styles.textStyle}>Okay</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </Modal>
+          </View>
         </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -180,49 +246,100 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.PrimaryColor,
     alignItems: "center",
     justifyContent: "center",
   },
-
-  image: {
-    marginBottom: 40,
-    width: 80,
-    height: 100,
+  LogoImage: {
+    marginVertical: 20,
+    width: windowWidth - 50,
+    height: 200,
+    resizeMode: 'cover',
+    overflow: 'visible',
   },
-
+  TextRegisterHeader: {
+    color: '#003f5c',
+    fontSize: 25,
+    fontWeight: 'bold',
+    marginVertical: 10,
+  },
+  RegisterContainer: {
+    flex: 1,
+    width: windowWidth,
+    paddingTop: 30,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
   inputView: {
-    backgroundColor: "#FFC0CB",
-    borderRadius: 30,
-    width: "70%",
+    flexDirection: global.lang == "english" ? "row" : "row-reverse",
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#003f5c',
+    borderWidth: 1,
+    borderRadius: 10,
+    width: windowWidth - 75,
     height: 45,
     marginBottom: 20,
-
+    paddingHorizontal: 10,
     alignItems: "center",
   },
   TextInput: {
     justifyContent: 'center',
     flex: 1,
   },
-
   forgotButton: {
     height: 30,
     marginBottom: 30,
   },
-
+  RegisterTitle: {
+    flex: 1,
+    width: windowWidth,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E7F7F8',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 50,
+  },
   RegisterBtn: {
     width: "80%",
     borderRadius: 25,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#FF1493",
+    marginTop: 10,
+    backgroundColor: Colors.SeconderyColor,
   },
   RegNavText: {
-    flexDirection: 'row',
-    position: 'absolute',
-    bottom: 0,
+    flex: 1,
+    flexDirection: global.lang == "english" ? "row" : "row-reverse",
+    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    width: windowWidth,
+  },
+  TextSignUpStyle: {
+    color: Colors.PrimaryColor,
+    fontWeight: 'bold',
   },
   TouchableRegNav: {
     justifyContent: 'center',
@@ -235,7 +352,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    backgroundColor: "#00000099",
   },
   modalView: {
     margin: 20,
@@ -250,24 +367,37 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
+    backgroundColor: Colors.PrimaryColor,
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 20
   },
-  button: {
+  buttonSuccess: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    width: 200,
+    elevation: 2,
+    backgroundColor: Colors.SeconderyColor,
   },
-  buttonClose: {
-    backgroundColor: "#2196F3",
+  RegisterText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#fff',
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
+  },
+  ImageSuccessStyle: {
+    height: 100,
+    width: 100,
+    marginBottom: 50
   },
 });
 

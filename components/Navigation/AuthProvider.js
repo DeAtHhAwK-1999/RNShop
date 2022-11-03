@@ -8,7 +8,7 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
-    const [Lang, setLang] = useState("arabic");
+    const [Lang, setLang] = useState("");
     const [image, setImage] = useState("");
 
     useEffect(() => {
