@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../Pages/Login';
-import Home from '../Pages/Home';
 import Register from '../Pages/Register';
-import Profile from '../Pages/Profile';
-import MyDrawer from './Drawer';
+import ChangeLanguage from '../Pages/ChangeLanguage';
+import Colors from '../../assets/Themes/Colors';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,8 +14,12 @@ const HomeNav = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
       </Stack.Group>
-      <Stack.Group screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={MyDrawer} />
+      <Stack.Group screenOptions={{ headerShown: true }}>
+        <Stack.Screen name="ChangeLanguage" component={ChangeLanguage} options={{
+          title: "Application Language",
+          headerTintColor: "#fff",
+          headerStyle: { backgroundColor: Colors.PrimaryColor }
+        }} />
       </Stack.Group>
     </Stack.Navigator>
   );

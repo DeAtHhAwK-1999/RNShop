@@ -16,7 +16,7 @@ import { AuthContext } from './AuthProvider';
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props, login) {
-    const {user, logout} = useContext(AuthContext);
+    const {user, logout, Lang} = useContext(AuthContext);
     return (
         <View style={{ flex: 1 }}>
             <View>
@@ -42,9 +42,8 @@ function CustomDrawerContent(props, login) {
 }
 
 const MyDrawer = ({ login }) => {
-    console.log(login);
     return (
-        <Drawer.Navigator initialRouteName='Main' drawerContent={props => <CustomDrawerContent {...props} login={login} />}>
+        <Drawer.Navigator initialRouteName='Main' screenOptions={{drawerType: "slide", headerShown: false}} drawerContent={props => <CustomDrawerContent {...props} login={login} />}>
             <Drawer.Screen name="Main" component={TabBottomNavigation} options={{ drawerIcon: () => <Image source={require('../../assets/Images/logo.png')} style={styles.icon} /> }} />
             <Drawer.Screen name="Profile" component={Profile} options={{ drawerIcon: () => <Image source={require('../../assets/Images/logo.png')} style={styles.icon} /> }} />
             <Drawer.Screen name="Settings" component={Settings} options={{ drawerIcon: () => <Image source={require('../../assets/Images/logo.png')} style={styles.icon} /> }} />

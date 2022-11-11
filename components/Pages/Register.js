@@ -19,6 +19,7 @@ import {
 import { AuthContext } from "../Navigation/AuthProvider";
 import MTranslate from "../../Languages/multiLang";
 import Colors from "../../assets/Themes/Colors";
+import Icon from 'react-native-vector-icons/Fontisto';
 
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -128,6 +129,9 @@ const Register = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
+        <TouchableOpacity style={styles.IconLangStyle} onPress={() => {navigation.navigate("ChangeLanguage")}}>
+          <Icon size={25} name='world' color={"#fff"} />
+        </TouchableOpacity>
         <Image style={styles.LogoImage} source={require("../../assets/Images/loginPic.png")} />
         <View style={styles.RegisterTitle}>
           <Text style={styles.TextRegisterHeader}>{MTranslate("create_new_account")}</Text>
@@ -250,6 +254,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  IconLangStyle: {
+    position: 'absolute',
+    zIndex: 1,
+    top: 20,
+    left: 20,
+  },
   LogoImage: {
     marginVertical: 20,
     width: windowWidth - 50,
@@ -282,7 +292,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   inputView: {
-    flexDirection: global.lang == "english" ? "row" : "row-reverse",
+    flexDirection: "row",
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#003f5c',
@@ -331,7 +341,7 @@ const styles = StyleSheet.create({
   },
   RegNavText: {
     flex: 1,
-    flexDirection: global.lang == "english" ? "row" : "row-reverse",
+    flexDirection: "row",
     marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'flex-end',

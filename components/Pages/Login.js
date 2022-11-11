@@ -18,6 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MTranslate from "../../Languages/multiLang";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Colors from "../../assets/Themes/Colors";
+import FIcon from "react-native-vector-icons/Fontisto";
 
 const windowWidth = Dimensions.get("screen").width;
 const windowHeight = Dimensions.get("screen").height;
@@ -29,7 +30,7 @@ const Login = ({ navigation }) => {
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(true);
     const [emailErrorMessage, setEmailErrorMessage] = useState("");
     const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
     const EmailInput = createRef();
@@ -93,6 +94,9 @@ const Login = ({ navigation }) => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={styles.container}>
+                <TouchableOpacity style={styles.IconLangStyle} onPress={() => { navigation.navigate("ChangeLanguage") }}>
+                    <FIcon size={25} name='world' color={"#fff"} />
+                </TouchableOpacity>
                 <Image style={styles.LogoImage} source={require("../../assets/Images/loginPic.png")} />
                 <View style={styles.LoginTitle}>
                     <Text style={styles.TextLoginHeader}>{MTranslate("login_to_your_account")}</Text>
@@ -164,10 +168,10 @@ const Login = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.RegNavText}>
+                            <Text>{MTranslate("you_don't_have_an_account?")} </Text>
                             <TouchableOpacity style={styles.TouchableRegNav} onPress={() => { navigation.navigate('Register') }}>
                                 <Text style={styles.TextSignUpStyle}>{MTranslate("sign_up")}</Text>
                             </TouchableOpacity>
-                            <Text>{MTranslate("you_don't_have_an_account?")} </Text>
                         </View>
                     </View>
                 </View>
@@ -184,6 +188,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.PrimaryColor,
         alignItems: "center",
+    },
+    IconLangStyle: {
+        position: 'absolute',
+        zIndex: 1,
+        top: 20,
+        left: 20,
     },
     LoginTitle: {
         flex: 1,
@@ -235,7 +245,7 @@ const styles = StyleSheet.create({
         overflow: 'visible',
     },
     inputView: {
-        flexDirection: global.lang == "english" ? "row" : "row-reverse",
+        flexDirection: "row",
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: '#003f5c',
@@ -281,7 +291,7 @@ const styles = StyleSheet.create({
     },
     RegNavText: {
         flex: 1,
-        flexDirection: global.ang == "english" ? "row-reverse" : "row",
+        flexDirection: "row",
         marginVertical: 10,
         justifyContent: 'center',
         alignItems: 'flex-end',
