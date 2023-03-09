@@ -13,11 +13,11 @@ import {
     Alert,
     Dimensions
 } from "react-native";
-import { AuthContext } from "../Navigation/AuthProvider";
+import { AuthContext } from "../../../context/provide.context";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MTranslate from "../../Languages/multiLang";
+import MTranslate from "../../../../Languages/multiLang";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Colors from "../../assets/Themes/Colors";
+import Colors from "../../../../assets/Themes/Colors";
 import FIcon from "react-native-vector-icons/Fontisto";
 
 const windowWidth = Dimensions.get("screen").width;
@@ -97,7 +97,7 @@ const Login = ({ navigation }) => {
                 <TouchableOpacity style={styles.IconLangStyle} onPress={() => { navigation.navigate("ChangeLanguage") }}>
                     <FIcon size={25} name='world' color={"#fff"} />
                 </TouchableOpacity>
-                <Image style={styles.LogoImage} source={require("../../assets/Images/loginPic.png")} />
+                <Image style={styles.LogoImage} source={require("../../../../assets/images/loginPic.png")} />
                 <View style={styles.LoginTitle}>
                     <Text style={styles.TextLoginHeader}>{MTranslate("login_to_your_account")}</Text>
                     <View style={styles.LoginContainer}>

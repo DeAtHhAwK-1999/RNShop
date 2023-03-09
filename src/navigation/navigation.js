@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from '../Pages/Home';
-import Profile from '../Pages/Profile';
-import Settings from '../Pages/Settings';
-import ChangeLanguage from '../Pages/ChangeLanguage';
+import Home from '../components/Screens/home/home';
+import Profile from '../components/Screens/profile/profile';
+import Settings from '../components/Screens/settings/settings';
+import ChangeLanguage from '../components/Screens/changeLanguage/changeLanguage';
 
 const Stack = createNativeStackNavigator();
 

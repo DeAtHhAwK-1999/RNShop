@@ -16,9 +16,9 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { AuthContext } from "../Navigation/AuthProvider";
-import MTranslate from "../../Languages/multiLang";
-import Colors from "../../assets/Themes/Colors";
+import { AuthContext } from "../../../context/provide.context";
+import MTranslate from "../../../../Languages/multiLang";
+import Colors from "../../../../assets/Themes/Colors";
 import Icon from 'react-native-vector-icons/Fontisto';
 
 const windowWidth = Dimensions.get("screen").width;
@@ -132,7 +132,7 @@ const Register = ({ navigation }) => {
         <TouchableOpacity style={styles.IconLangStyle} onPress={() => {navigation.navigate("ChangeLanguage")}}>
           <Icon size={25} name='world' color={"#fff"} />
         </TouchableOpacity>
-        <Image style={styles.LogoImage} source={require("../../assets/Images/loginPic.png")} />
+        <Image style={styles.LogoImage} source={require("../../../../assets/images/loginPic.png")} />
         <View style={styles.RegisterTitle}>
           <Text style={styles.TextRegisterHeader}>{MTranslate("create_new_account")}</Text>
           <View style={styles.RegisterContainer}>
@@ -227,7 +227,7 @@ const Register = ({ navigation }) => {
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                   <Text style={styles.modalText}>You Registered Success!</Text>
-                  <Image source={require("../../assets/Images/RegisterSuccess.png")} style={styles.ImageSuccessStyle} />
+                  <Image source={require("../../../../assets/images/RegisterSuccess.png")} style={styles.ImageSuccessStyle} />
                   <Pressable
                     style={styles.buttonSuccess}
                     onPress={() => { setModalVisible(!modalVisible); }}

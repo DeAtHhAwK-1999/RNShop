@@ -10,6 +10,7 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [Lang, setLang] = useState("");
     const [image, setImage] = useState("");
+    const [data, setData] = useState();
 
     useEffect(() => {
         getLanguage();
@@ -30,11 +31,13 @@ const AuthProvider = ({ children }) => {
                 setLang,
                 image,
                 setImage,
+                data,
+                setData,
                 login: async (email, password) => {
                     try {
                         await auth().signInWithEmailAndPassword(email, password);
                     } catch (error) {
-                        console.log(error);
+                        console.log("Error =>", error);
                         Alert.alert("something went wrong!");
                     }
                 },
@@ -42,7 +45,7 @@ const AuthProvider = ({ children }) => {
                     try {
                         await auth().createUserWithEmailAndPassword(email, password);
                     } catch (error) {
-                        console.log(error);
+                        console.log("Error =>", error);
                         Alert.alert("something went wrong!");
                     }
                 },
@@ -50,7 +53,7 @@ const AuthProvider = ({ children }) => {
                     try {
                         await auth().signOut();
                     } catch (error) {
-                        console.log(error);
+                        console.log("Error =>", error);
                     }
                 },
             }}

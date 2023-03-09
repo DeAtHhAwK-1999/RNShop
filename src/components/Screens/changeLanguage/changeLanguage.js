@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { View, TouchableOpacity, Text, Image, I18nManager, StyleSheet, DevSettings, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthContext } from '../Navigation/AuthProvider';
-import Colors from '../../assets/Themes/Colors';
+import { AuthContext } from '../../../context/provide.context';
+import Colors from '../../../../assets/Themes/Colors';
 
 const ChangeLanguage = ({ navigation }) => {
     const { setLang, Lang, user } = useContext(AuthContext);
@@ -42,7 +42,7 @@ const ChangeLanguage = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ImageBackground style={styles.ImageBackgroundStyle} source={require("../../assets/Images/backgroundImage.jpg")}>
+            <ImageBackground style={styles.ImageBackgroundStyle} source={require("../../../../assets/images/backgroundImage.jpg")}>
                 <View style={styles.languageContainerStyle}>
                     <TouchableOpacity style={language == "arabic" ? styles.LangBtn : styles.ActiveLangBtn} onPress={() => { setLanguageEn() }}>
                         <Text style={styles.LangText}>English</Text>

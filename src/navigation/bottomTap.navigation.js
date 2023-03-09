@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Nav from './Navigation';
-import Products from '../Pages/Products';
-import Offers from '../Pages/Offers';
+import MIcons from 'react-native-vector-icons/MaterialIcons';
+import Nav from './navigation';
+import Products from '../components/Screens/products/products';
+import Offers from '../components/Screens/offers/offers';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import Colors from '../../assets/Themes/Colors';
-import Profile from '../Pages/Profile';
-import Settings from '../Pages/Settings';
+import Profile from '../components/Screens/profile/profile';
+import Settings from '../components/Screens/settings/settings';
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -52,7 +53,13 @@ function MyTabBar({ state, descriptors, navigation }) {
                         onLongPress={onLongPress}
                         style={label != "Settings" ? styles.mainItemContainer : styles.CustomButtonStyle}
                     >
-                        <Icons name={icon} size={35} color={label != "Settings" ? isFocused ? Colors.SeconderyColor : '#fff' : Colors.SeconderyColor} />
+                        {
+                            label == "Offers"
+                                ?
+                                <MIcons name={icon} size={35} color={label != "Settings" ? isFocused ? Colors.SeconderyColor : '#fff' : Colors.SeconderyColor} />
+                                :
+                                <Icons name={icon} size={35} color={label != "Settings" ? isFocused ? Colors.SeconderyColor : '#fff' : Colors.SeconderyColor} />
+                        }
                         {
                             label != "Settings"
                                 ?
@@ -94,7 +101,7 @@ function TabBottomNavigation() {
                 component={Offers}
                 options={{
                     tabBarLabel: 'Offers',
-                    tabBarIcon: "bell"
+                    tabBarIcon: "local-offer"
                 }}
             />
             <Tab.Screen
@@ -110,7 +117,7 @@ function TabBottomNavigation() {
                 component={Products}
                 options={{
                     tabBarLabel: 'Products',
-                    tabBarIcon: "alpha-x-circle"
+                    tabBarIcon: "format-list-text"
                 }}
             />
             <Tab.Screen

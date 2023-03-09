@@ -1,8 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import MyDrawer from './Drawer';
-import HomeNav from './HomeNavigation';
-import { AuthContext } from './AuthProvider';
+import MyDrawer from './drawer.navigation';
+import HomeNav from './home.navigation';
+import { AuthContext } from '../context/provide.context';
 import auth from '@react-native-firebase/auth';
 
 const AppNav = () => {
@@ -24,7 +24,7 @@ const AppNav = () => {
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
     }, []);
-    global.lang = Lang;
+    global.lang = Lang ? Lang : "english";
     return (
         <NavigationContainer>
             {

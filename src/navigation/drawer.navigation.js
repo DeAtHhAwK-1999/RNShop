@@ -8,15 +8,15 @@ import {
     DrawerItemList,
     DrawerItem,
 } from '@react-navigation/drawer';
-import TabBottomNavigation from './TabBottomNavigation';
-import Profile from '../Pages/Profile';
-import Settings from '../Pages/Settings';
-import { AuthContext } from './AuthProvider';
+import TabBottomNavigation from './bottomTap.navigation';
+import Profile from '../components/Screens/profile/profile';
+import Settings from '../components/Screens/settings/settings';
+import { AuthContext } from '../context/provide.context';
 
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props, login) {
-    const {user, logout, Lang} = useContext(AuthContext);
+    const { user, logout, Lang } = useContext(AuthContext);
     return (
         <View style={{ flex: 1 }}>
             <View>
@@ -32,7 +32,7 @@ function CustomDrawerContent(props, login) {
             >
                 <View style={styles.item}>
                     <View style={styles.iconContainer}>
-                        <Image source={require('../../assets/Images/logo.png')} style={styles.icon} />
+                        <Image source={require('../../assets/images/logo.png')} style={styles.icon} />
                     </View>
                     <Text style={styles.label}>Logout</Text>
                 </View>
@@ -43,10 +43,10 @@ function CustomDrawerContent(props, login) {
 
 const MyDrawer = ({ login }) => {
     return (
-        <Drawer.Navigator initialRouteName='Main' screenOptions={{drawerType: "slide", headerShown: false}} drawerContent={props => <CustomDrawerContent {...props} login={login} />}>
-            <Drawer.Screen name="Main" component={TabBottomNavigation} options={{ drawerIcon: () => <Image source={require('../../assets/Images/logo.png')} style={styles.icon} /> }} />
-            <Drawer.Screen name="Profile" component={Profile} options={{ drawerIcon: () => <Image source={require('../../assets/Images/logo.png')} style={styles.icon} /> }} />
-            <Drawer.Screen name="Settings" component={Settings} options={{ drawerIcon: () => <Image source={require('../../assets/Images/logo.png')} style={styles.icon} /> }} />
+        <Drawer.Navigator initialRouteName='Main' screenOptions={{ drawerType: "slide", headerShown: false }} drawerContent={props => <CustomDrawerContent {...props} login={login} />}>
+            <Drawer.Screen name="Main" component={TabBottomNavigation} options={{ drawerIcon: () => <Image source={require('../../assets/images/logo.png')} style={styles.icon} /> }} />
+            <Drawer.Screen name="Profile" component={Profile} options={{ drawerIcon: () => <Image source={require('../../assets/images/logo.png')} style={styles.icon} /> }} />
+            <Drawer.Screen name="Settings" component={Settings} options={{ drawerIcon: () => <Image source={require('../../assets/images/logo.png')} style={styles.icon} /> }} />
         </Drawer.Navigator>
     );
 }
