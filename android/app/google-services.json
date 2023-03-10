@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "78147702098",
-    "project_id": "mangmentongtv-4fd66",
-    "storage_bucket": "mangmentongtv-4fd66.appspot.com"
+    "project_number": "742913736970",
+    "project_id": "shop-app-332eb",
+    "storage_bucket": "shop-app-332eb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:78147702098:android:5ab8c636ed09a98120fe8b",
+        "mobilesdk_app_id": "1:742913736970:android:70e049eea0d51275dcfaf3",
         "android_client_info": {
-          "package_name": "com.mangmentongtv"
+          "package_name": "com.shop"
         }
       },
       "oauth_client": [
         {
-          "client_id": "78147702098-hceu7gks4dcuknrrio86et1cb24i1836.apps.googleusercontent.com",
+          "client_id": "742913736970-5b1tqi71t53kb7vve0k2p8jsj4j5fk4m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD0icMTNA93kImIWtJ9F7ajNPMAinwORxg"
+          "current_key": "AIzaSyDWmG5GgXs43o7iRqzLeh-qavQQLtt-juU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "78147702098-hceu7gks4dcuknrrio86et1cb24i1836.apps.googleusercontent.com",
+              "client_id": "742913736970-5b1tqi71t53kb7vve0k2p8jsj4j5fk4m.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
